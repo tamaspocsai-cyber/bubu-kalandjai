@@ -1,0 +1,251 @@
+/* =========================================================
+ * Számország (matematika) – a játékok saját stílusa
+ * Minden szelektor a .g-math (világ) / .g-math-<játék> osztállyal kezdődik.
+ * ========================================================= */
+
+.g-math { --m-pic: clamp(30px, 7vmin, 66px); --cell: clamp(34px, 7.6vmin, 68px); --m-ink: #2B2D42; }
+.g-math .task-head { max-width: 100%; }
+
+/* ---------- közös: képek, koppintásos számolás ---------- */
+.g-math .m-pic { font-size: var(--m-pic); line-height: 1.1; position: relative; }
+.g-math .m-in { animation: mPopIn .38s cubic-bezier(.3, 1.6, .5, 1) backwards; }
+.g-math .m-tap { cursor: pointer; }
+.g-math .m-counted { position: relative; }
+.g-math .m-counted::after {
+  content: attr(data-c); position: absolute; right: -.25em; top: -.2em;
+  min-width: 1.5em; height: 1.5em; padding: 0 .2em; border-radius: .75em;
+  background: var(--d); color: #fff; border: 2px solid #fff;
+  font-family: var(--font-ui); font-weight: 900; font-size: clamp(12px, 2.3vmin, 20px); line-height: 1.3; text-align: center;
+  animation: mPopIn .3s cubic-bezier(.3, 1.6, .5, 1); pointer-events: none;
+}
+.g-math .m-hidden { visibility: hidden; pointer-events: none; }
+.g-math .m-reveal { animation: mPopIn .4s cubic-bezier(.3, 1.5, .5, 1); }
+@keyframes mPopIn { from { transform: scale(0); opacity: 0; } }
+
+/* ---------- egyenlet ---------- */
+.g-math .m-eq {
+  display: flex; align-items: center; justify-content: center; gap: clamp(6px, 1.6vmin, 16px);
+  font-weight: 900; font-size: clamp(2.4rem, 9vmin, 5rem); line-height: 1; color: var(--d);
+}
+.g-math .m-eqnum { cursor: pointer; }
+.g-math .m-eqop { color: var(--m-ink); }
+.g-math .m-eqslot {
+  min-width: 1.3em; padding: .05em .15em; text-align: center; border-radius: 18px;
+  border: 4px dashed var(--c); background: #fff; color: var(--c);
+}
+.g-math .m-eqslot.m-filled { border-style: solid; border-color: var(--ok); background: var(--ok-bg); color: #23934B; animation: mPopIn .4s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* ---------- segítség (villanykörte) ---------- */
+.g-math .m-helpbtn {
+  width: clamp(56px, 10vmin, 86px); height: clamp(56px, 10vmin, 86px); border-radius: 50%;
+  border: 4px solid #fff; background: #FFE27A; box-shadow: 0 6px 0 #E8B93C;
+  font-family: var(--font-emoji); font-size: clamp(1.6rem, 5.5vmin, 2.6rem); line-height: 1;
+  display: grid; place-items: center; flex: none;
+  animation: mGlow 2.4s ease-in-out infinite;
+}
+.g-math .m-helpbtn:active { transform: translateY(4px); box-shadow: 0 2px 0 #E8B93C; }
+.g-math .m-helpbtn.m-used { animation: none; opacity: .55; }
+@keyframes mGlow { 0%, 100% { filter: none; } 50% { filter: drop-shadow(0 0 10px #FFD23F); } }
+.g-math .m-help {
+  background: rgba(255, 255, 255, .75); border-radius: 26px; padding: clamp(6px, 1.4vmin, 14px);
+  --cell: clamp(22px, 4.6vmin, 42px);
+}
+
+/* ---------- tízes keret ---------- */
+.g-math .m-frames { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 2vmin, 20px); }
+.g-math .m-frame {
+  display: grid; grid-template-columns: repeat(5, var(--cell)); gap: clamp(3px, .8vmin, 8px);
+  padding: clamp(4px, 1vmin, 10px); background: #fff; border: 4px solid var(--d); border-radius: 18px;
+  align-content: start;
+}
+.g-math .m-cell {
+  width: var(--cell); height: var(--cell); border-radius: 10px; border: 2px dashed #C9CDE0;
+  display: grid; place-items: center; position: relative;
+}
+.g-math .m-cell.m-tap:not(.m-full) { background: #F5F7FF; }
+.g-math .m-dot {
+  display: block; width: 76%; height: 76%; border-radius: 50%; position: relative;
+  animation: mPopIn .35s cubic-bezier(.3, 1.6, .5, 1) backwards;
+}
+.g-math .m-red { background: radial-gradient(circle at 35% 30%, #FFB3B3, #FF5A5A 60%, #D93C3C); }
+.g-math .m-blue { background: radial-gradient(circle at 35% 30%, #B8D6FF, #4D96FF 60%, #2F6FCC); }
+.g-math .m-x { opacity: .5; }
+.g-math .m-x::after {
+  content: '✖'; position: absolute; inset: 0; display: grid; place-items: center;
+  color: var(--m-ink); font-size: calc(var(--cell) * .62); line-height: 1; font-family: var(--font-ui);
+}
+
+/* =========================================================
+ * 1. Számolj!
+ * ========================================================= */
+.g-math-count .m-count { display: flex; flex-direction: column; align-items: center; gap: clamp(6px, 1.6vmin, 16px); }
+.g-math-count .m-g1 { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 2.4vmin, 24px); --m-pic: clamp(44px, 11vmin, 96px); }
+.g-math-count .m-g2 { --m-pic: clamp(36px, 8.4vmin, 76px); }
+.g-math-count .m-g3 { --m-pic: clamp(26px, 5.8vmin, 54px); }
+.g-math-count .m-crow { display: flex; gap: clamp(10px, 3vmin, 30px); justify-content: center; }
+.g-math-count .m-g5 { display: flex; gap: clamp(3px, 1vmin, 10px); }
+.g-math-count .m-framed {
+  padding: clamp(3px, .8vmin, 8px) clamp(5px, 1.2vmin, 12px);
+  border: 3px dashed rgba(0, 0, 0, .18); border-radius: 18px; background: rgba(255, 255, 255, .6);
+}
+
+/* =========================================================
+ * 2. Melyik több?
+ * ========================================================= */
+.g-math-more .m-grpch { gap: clamp(16px, 5vmin, 50px); }
+.g-math-more .m-grpch .choice { padding: clamp(10px, 2vmin, 20px); min-width: clamp(140px, 30vmin, 280px); }
+.g-math-more .m-grp {
+  display: grid; grid-template-columns: repeat(3, auto); justify-content: center; align-content: center;
+  gap: clamp(4px, 1.2vmin, 12px); min-height: clamp(90px, 20vmin, 190px); --m-pic: clamp(32px, 7.4vmin, 66px);
+}
+.g-math-more .m-numcards { gap: clamp(16px, 5vmin, 50px); }
+.g-math-more .m-numcards .choice { min-width: clamp(130px, 26vmin, 240px); padding: clamp(8px, 1.6vmin, 16px); }
+.g-math-more .m-numcard { display: flex; flex-direction: column; align-items: center; gap: clamp(4px, 1vmin, 10px); }
+.g-math-more .m-bignum { font-weight: 900; font-size: clamp(3rem, 13vmin, 7rem); line-height: 1; color: var(--d); }
+.g-math-more .m-minis { display: flex; flex-direction: column; gap: 2px; align-items: center; --m-pic: clamp(16px, 3.4vmin, 32px); }
+.g-math-more .m-mrow { display: flex; gap: 2px; }
+.g-math-more .m-cmp { display: flex; align-items: center; gap: clamp(10px, 3vmin, 30px); position: relative; }
+.g-math-more .m-cmpnum { font-weight: 900; font-size: clamp(3.2rem, 14vmin, 7.5rem); line-height: 1; color: var(--d); cursor: pointer; min-width: 1.2em; text-align: center; }
+.g-math-more .m-signslot {
+  display: grid; place-items: center; width: clamp(70px, 14vmin, 130px); height: clamp(70px, 14vmin, 130px);
+  border: 5px dashed var(--c); border-radius: 24px; background: #fff;
+  font-weight: 900; font-size: clamp(2.6rem, 10vmin, 5.6rem); line-height: 1; color: var(--c);
+}
+.g-math-more .m-signslot.m-filled { border-style: solid; border-color: var(--ok); background: var(--ok-bg); color: #23934B; animation: mChomp .6s ease-out; }
+.g-math-more .m-croc { font-family: var(--font-emoji); font-size: clamp(2rem, 8vmin, 4.4rem); line-height: 1; cursor: pointer; animation: mCroc 2.6s ease-in-out infinite; transform-origin: 30% 70%; }
+.g-math-more .m-signs .m-sign { font-weight: 900; font-size: clamp(3rem, 11vmin, 6rem); line-height: 1; color: var(--d); }
+@keyframes mCroc { 0%, 80%, 100% { transform: rotate(0); } 86% { transform: rotate(-10deg); } 92% { transform: rotate(6deg); } }
+@keyframes mChomp { 0% { transform: scale(1.4); } 40% { transform: scale(.85); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+/* =========================================================
+ * 3–4. Összeadás, kivonás – jelenetek
+ * ========================================================= */
+.g-math-add .task-head, .g-math-sub .task-head { flex-direction: column; gap: clamp(6px, 1.6vmin, 16px); }
+.g-math-add.m-lv3 .task-head, .g-math-sub.m-lv3 .task-head { flex-direction: row; }
+.g-math-add.m-lv3 .m-eq, .g-math-sub.m-lv3 .m-eq { font-size: clamp(3rem, 12vmin, 6.5rem); }
+
+.g-math .m-scene {
+  position: relative; overflow: hidden; border-radius: 26px;
+  width: clamp(260px, 72vmin, 700px); min-height: clamp(110px, 24vmin, 220px);
+  padding: clamp(10px, 2.2vmin, 22px) clamp(10px, 2vmin, 20px);
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 4px;
+  --m-pic: clamp(30px, 6.8vmin, 62px);
+}
+.g-math.m-lv1 .m-scene { --m-pic: clamp(38px, 9vmin, 80px); }
+.g-math .m-sitems { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: clamp(10px, 3vmin, 30px); position: relative; z-index: 1; }
+.g-math .m-sgrp { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(2px, .8vmin, 8px); max-width: clamp(200px, 40vmin, 380px); }
+.g-math .m-new:empty { display: none; }
+.g-math .m-deco { font-family: var(--font-emoji); font-size: clamp(3rem, 12vmin, 6.5rem); line-height: .9; margin-top: -1.2vmin; }
+
+.g-math .m-sc-basket { background: linear-gradient(180deg, #FFF8E8, #FFE9C4); }
+.g-math .m-sc-pond { background: linear-gradient(180deg, #CFF0FF 0%, #8FD3F5 45%, #5DB8E8 100%); }
+.g-math .m-sc-meadow { background: linear-gradient(180deg, #DFF6FF 0%, #DFF6FF 45%, #A8E6A1 46%, #79CF72 100%); }
+.g-math .m-sc-plate { background: radial-gradient(ellipse 48% 60% at 50% 60%, #fff 0 70%, #E3E7F0 71% 78%, transparent 79%), #FFF3E0; }
+.g-math .m-sc-tree { background: linear-gradient(180deg, #DFF6FF, #BDEBFF); justify-content: center; }
+.g-math .m-sc-sky { background: linear-gradient(180deg, #BDEBFF, #EAF9FF); }
+.g-math .m-branch {
+  width: 92%; height: clamp(12px, 2.4vmin, 22px); margin-top: -.8vmin; border-radius: 12px;
+  background: linear-gradient(180deg, #A9744F, #7A4E2D); box-shadow: 0 4px 0 rgba(0, 0, 0, .12);
+}
+
+/* érkezés (összeadás) */
+.g-math .m-arrive { animation-duration: .8s; animation-fill-mode: both; animation-timing-function: cubic-bezier(.3, 1.3, .5, 1); }
+.g-math .m-arrive-drop { animation-name: mDropIn; }
+.g-math .m-arrive-swim { animation-name: mSwimIn; animation-timing-function: ease-out; }
+.g-math .m-arrive-fly { animation-name: mFlyIn; animation-timing-function: ease-out; }
+@keyframes mDropIn { 0% { transform: translateY(-34vmin); opacity: 0; } 15% { opacity: 1; } 70% { transform: translateY(0); } 85% { transform: translateY(-2vmin); } 100% { transform: translateY(0); } }
+@keyframes mSwimIn { 0% { transform: translateX(60vmin); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateX(0); } }
+@keyframes mFlyIn { 0% { transform: translate(-50vmin, -24vmin) rotate(-25deg); opacity: 0; } 20% { opacity: 1; } 60% { transform: translate(-10vmin, -8vmin) rotate(10deg); } 100% { transform: translate(0, 0) rotate(0); } }
+
+/* távozás (kivonás) */
+.g-math .m-leave { animation-duration: 1s; animation-fill-mode: both; animation-timing-function: ease-in; pointer-events: none; }
+.g-math .m-leave-fly { animation-name: mFlyAway; }
+.g-math .m-leave-float { animation-name: mFloatAway; animation-duration: 1.3s; }
+.g-math .m-leave-swim { animation-name: mSwimAway; }
+.g-math .m-leave-eat { animation-name: mEaten; animation-duration: .8s; }
+@keyframes mFlyAway { 0% { transform: translate(0, 0); } 20% { transform: translate(-1vmin, -3vmin) rotate(-10deg); } 100% { transform: translate(45vmin, -40vmin) rotate(-25deg); opacity: 0; } }
+@keyframes mFloatAway { 0% { transform: translateY(0); } 30% { transform: translate(1vmin, -6vmin) rotate(4deg); } 100% { transform: translate(-3vmin, -45vmin) rotate(-6deg); opacity: 0; } }
+@keyframes mSwimAway { 0% { transform: translateX(0) scaleX(1); } 15% { transform: translateX(0) scaleX(-1); } 100% { transform: translateX(60vmin) scaleX(-1); opacity: 0; } }
+@keyframes mEaten { 0% { transform: scale(1); } 25% { transform: scale(1.15) rotate(-8deg); } 50% { transform: scale(.8) rotate(8deg); clip-path: circle(50% at 50% 50%); } 100% { transform: scale(0); opacity: 0; } }
+
+/* =========================================================
+ * 5. Számszomszédok – vonat
+ * ========================================================= */
+.g-math-seq .m-trainwrap { position: relative; overflow: hidden; padding: clamp(4px, 1vmin, 10px) clamp(4px, 1vmin, 10px) 0; flex: none; }
+.g-math-seq .m-train > * { flex: none; }
+.g-math-seq .m-train {
+  display: flex; align-items: flex-end; gap: clamp(4px, 1.2vmin, 12px); position: relative; z-index: 1;
+  padding-bottom: clamp(10px, 2.2vmin, 20px);
+  animation: mTrainIn 1.5s cubic-bezier(.2, .8, .3, 1) both;
+}
+@keyframes mTrainIn { 0% { transform: translateX(110%); } 85% { transform: translateX(-1.5%); } 100% { transform: translateX(0); } }
+.g-math-seq .m-loco { font-family: var(--font-emoji); font-size: clamp(3.4rem, 13vmin, 7rem); line-height: .9; animation: mPuff 1s ease-in-out infinite; }
+@keyframes mPuff { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.g-math-seq .m-wagon {
+  position: relative; width: clamp(62px, 12vmin, 112px); height: clamp(56px, 10.5vmin, 100px);
+  border-radius: 14px; background: var(--c); border: 4px solid var(--d);
+  display: grid; place-items: center; cursor: pointer;
+  box-shadow: inset 0 -6px 0 rgba(0, 0, 0, .12);
+}
+.g-math-seq .m-wnum { font-weight: 900; font-size: clamp(2rem, 7vmin, 4rem); line-height: 1; color: #fff; text-shadow: 0 3px 0 rgba(0, 0, 0, .18); }
+.g-math-seq .m-wheels { position: absolute; left: 0; right: 0; bottom: calc(-1 * clamp(10px, 2.2vmin, 20px)); height: clamp(16px, 3.2vmin, 28px); pointer-events: none; }
+.g-math-seq .m-wheels::before, .g-math-seq .m-wheels::after {
+  content: ''; position: absolute; bottom: 0; width: clamp(16px, 3.2vmin, 28px); height: clamp(16px, 3.2vmin, 28px);
+  border-radius: 50%; background: radial-gradient(circle, #fff 0 22%, #3A3A5C 24%); border: 3px solid #3A3A5C; box-sizing: border-box;
+}
+.g-math-seq .m-wheels::before { left: 12%; }
+.g-math-seq .m-wheels::after { right: 12%; }
+.g-math-seq .m-wagon.m-missing { background: #fff; border-style: dashed; cursor: default; animation: mWait 1.6s ease-in-out 1.6s infinite; }
+.g-math-seq .m-missing .m-wnum { color: var(--c); text-shadow: none; }
+.g-math-seq .m-wagon.m-filled { background: var(--ok); border-color: #23934B; border-style: solid; animation: mPopIn .4s cubic-bezier(.3, 1.6, .5, 1); }
+.g-math-seq .m-wagon.m-filled .m-wnum { color: #fff; }
+.g-math-seq .m-rail {
+  position: absolute; left: 0; right: 0; bottom: 0; height: clamp(8px, 1.4vmin, 12px);
+  background: repeating-linear-gradient(90deg, #8D5A3B 0 10px, transparent 10px 22px), linear-gradient(#7A7F99, #7A7F99) top / 100% 4px no-repeat;
+}
+@keyframes mWait { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* =========================================================
+ * 6. Tízes barátok
+ * ========================================================= */
+.g-math-tens .task-head { flex-direction: column; gap: clamp(8px, 2vmin, 20px); }
+.g-math-tens.m-lv1 .m-frames { --cell: clamp(44px, 10vmin, 90px); }
+.g-math-tens.m-lv3 .m-frames { --cell: clamp(28px, 6.2vmin, 58px); }
+.g-math-tens .m-hide { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: clamp(14px, 4vmin, 40px); }
+.g-math-tens .m-balls { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(4px, 1vmin, 10px); max-width: clamp(170px, 36vmin, 340px); }
+.g-math-tens .m-ball { width: clamp(30px, 6.4vmin, 58px); height: clamp(30px, 6.4vmin, 58px); flex: none; }
+.g-math-tens .m-box { position: relative; display: grid; place-items: center; min-width: clamp(90px, 18vmin, 170px); min-height: clamp(80px, 15vmin, 140px); }
+.g-math-tens .m-boxpic { font-family: var(--font-emoji); font-size: clamp(4rem, 15vmin, 8rem); line-height: 1; animation: mWobble 2.2s ease-in-out infinite; }
+.g-math-tens .m-boxq {
+  position: absolute; top: 2%; right: 4%; width: 1.4em; height: 1.4em; border-radius: 50%;
+  display: grid; place-items: center; background: var(--c); color: #fff; border: 3px solid #fff;
+  font-weight: 900; font-size: clamp(1.2rem, 4vmin, 2.2rem); line-height: 1;
+}
+.g-math-tens .m-box.m-open { border: 4px dashed var(--c); border-radius: 22px; background: #fff; padding: clamp(6px, 1.4vmin, 14px); animation: mPopIn .4s cubic-bezier(.3, 1.6, .5, 1); }
+@keyframes mWobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-4deg); } 75% { transform: rotate(4deg); } }
+
+/* =========================================================
+ * 7. Formák
+ * ========================================================= */
+.g-math .m-svg { display: block; }
+.g-math .m-svg svg { display: block; width: 100%; height: 100%; overflow: visible; }
+.g-math-shapes .m-shapes .m-svg { width: clamp(64px, 14vmin, 130px); height: clamp(64px, 14vmin, 130px); }
+.g-math-shapes .m-objpic { font-family: var(--font-emoji); font-size: clamp(4.4rem, 18vmin, 9.5rem); line-height: 1; cursor: pointer; animation: mWobble 3s ease-in-out infinite; }
+.g-math-shapes .m-picture { width: clamp(200px, 46vmin, 420px); height: clamp(200px, 46vmin, 420px); cursor: pointer; }
+.g-math-shapes .m-picture [data-k] { cursor: pointer; transition: filter .2s; }
+.g-math-shapes .m-picture .m-mark { stroke: #FFC93C; stroke-width: 9; filter: drop-shadow(0 0 4px #FFC93C); }
+.g-math-shapes .m-pattern { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: clamp(4px, 1.4vmin, 14px); }
+.g-math-shapes .m-pshape { width: clamp(40px, 9vmin, 84px); height: clamp(40px, 9vmin, 84px); }
+.g-math-shapes .m-pslot {
+  display: grid; place-items: center; width: clamp(48px, 10.5vmin, 98px); height: clamp(48px, 10.5vmin, 98px);
+  border: 4px dashed var(--c); border-radius: 18px; background: #fff;
+  font-weight: 900; font-size: clamp(2rem, 7vmin, 3.8rem); color: var(--c); line-height: 1;
+}
+.g-math-shapes .m-pslot.m-filled { border-style: solid; border-color: var(--ok); background: var(--ok-bg); animation: mPopIn .4s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* ---------- alacsony képernyő (fekvő telefon / kis laptop) ---------- */
+@media (max-height: 560px) {
+  .g-math { --cell: clamp(26px, 6.4vmin, 50px); }
+  .g-math .m-scene { min-height: 0; }
+  .g-math-shapes .m-picture { width: 40vmin; height: 40vmin; }
+}

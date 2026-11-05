@@ -1,0 +1,530 @@
+/* Bubu kalandjai – Fejtörő-hegy (logika) játékok
+ * Minden szelektor a játék saját osztályával kezdődik (.g-logika-<játék>).
+ * Méretezés: vmin + vh, hogy tableten (álló/fekvő) és laptopon is görgetés nélkül elférjen.
+ */
+
+/* ---------- közös gomb-alap a saját (nem ctx.choose) gombokhoz ---------- */
+.g-logika-memory .lg-card,
+.g-logika-where .lg-thing,
+.g-logika-simon .lg-pad,
+.g-logika-simon .lg-replay,
+.g-logika-sort .lg-sitem {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.g-logika-memory .pic,
+.g-logika-pattern .pic,
+.g-logika-odd .pic,
+.g-logika-where .pic,
+.g-logika-shadow .pic,
+.g-logika-simon .pic,
+.g-logika-sort .pic {
+  line-height: 1;
+  display: inline-block;
+}
+
+@keyframes lg-pop-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes lg-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+@keyframes lg-glow {
+  0%, 100% { box-shadow: 0 0 0 0.5vmin #FFD166, 0 0.8vmin 1.6vmin rgba(0, 0, 0, 0.15); }
+  50% { box-shadow: 0 0 0 1.2vmin #FFD166, 0 0.8vmin 1.6vmin rgba(0, 0, 0, 0.15); }
+}
+
+/* =========================================================
+ * 1) MEMÓRIA – 3D lapfordítás
+ * ========================================================= */
+.g-logika-memory .lg-mgrid {
+  --gap: clamp(6px, 1.6vmin, 16px);
+  --cs: min(calc((94vw - (var(--cols) - 1) * var(--gap)) / var(--cols)),
+            calc((100vh - 170px) / var(--rows) - var(--gap)),
+            26vmin);
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cs));
+  grid-template-rows: repeat(var(--rows), var(--cs));
+  gap: var(--gap);
+  justify-content: center;
+  align-content: center;
+  margin: auto;
+}
+.g-logika-memory .lg-card {
+  width: var(--cs);
+  height: var(--cs);
+  background: none;
+  perspective: 900px;
+  animation: lg-pop-in 0.45s both;
+  border-radius: 16%;
+}
+.g-logika-memory .lg-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.4, 0.2, 0.2, 1.2);
+}
+.g-logika-memory .lg-card.flipped .lg-inner { transform: rotateY(180deg); }
+.g-logika-memory .lg-side {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0 0.6vmin 1.4vmin rgba(0, 0, 0, 0.18);
+}
+.g-logika-memory .lg-back {
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255, 255, 255, 0.35) 0 12%, transparent 13%),
+    linear-gradient(135deg, var(--c, #9B5DE5), var(--d, #7339BF));
+  border: 0.6vmin solid rgba(255, 255, 255, 0.7);
+}
+.g-logika-memory .lg-q {
+  color: #fff;
+  font-weight: 900;
+  font-size: calc(var(--cs) * 0.5);
+  line-height: 1;
+  text-shadow: 0 0.4vmin 0 rgba(0, 0, 0, 0.2);
+}
+.g-logika-memory .lg-face {
+  background: #fff;
+  transform: rotateY(180deg);
+  border: 0.6vmin solid #E8DDFB;
+}
+.g-logika-memory .lg-face .pic { font-size: calc(var(--cs) * 0.62); }
+.g-logika-memory .lg-card.matched .lg-face {
+  background: #E6FAEE;
+  border-color: #3DBE6B;
+}
+.g-logika-memory .lg-card.matched { cursor: default; }
+.g-logika-memory .lg-card.hint .lg-back { animation: lg-glow 0.6s ease-in-out 3; }
+.g-logika-memory .lg-card:not(.flipped):hover .lg-inner { transform: translateY(-0.5vmin); }
+
+/* =========================================================
+ * 2) MI JÖN? – mintasor
+ * ========================================================= */
+.g-logika-pattern .task-head { padding: clamp(8px, 1.6vmin, 18px); max-width: 98vw; box-sizing: border-box; }
+.g-logika-pattern .lg-seq {
+  --cell: min(13vmin, calc((94vw - 2 * clamp(8px, 1.6vmin, 18px)) / var(--n) - 1vmin), 16vh);
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1vmin;
+  justify-content: center;
+  align-items: center;
+}
+.g-logika-pattern .lg-cell {
+  width: var(--cell);
+  height: var(--cell);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F6F0FF;
+  border-radius: 22%;
+  animation: lg-pop-in 0.4s both;
+  flex: 0 0 auto;
+}
+.g-logika-pattern .lg-cell > .pic { font-size: calc(var(--cell) * 0.72); }
+.g-logika-pattern .lg-qcell {
+  background: #fff;
+  border: 0.6vmin dashed var(--c, #9B5DE5);
+  box-sizing: border-box;
+}
+.g-logika-pattern .lg-qmark {
+  font-weight: 900;
+  color: var(--c, #9B5DE5);
+  font-size: calc(var(--cell) * 0.7);
+  line-height: 1;
+  animation: lg-pulse 1.2s ease-in-out infinite;
+}
+.g-logika-pattern .lg-qcell.filled { border-style: solid; border-color: #3DBE6B; background: #E6FAEE; }
+/* növekvő minta: pöttycsoportok */
+.g-logika-pattern .lg-seq.grow { --cell: min(17vmin, calc((94vw - 2 * clamp(8px, 1.6vmin, 18px)) / var(--n) - 1vmin), 20vh); }
+.g-logika-pattern .lg-dots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4%;
+  justify-items: center;
+  align-items: center;
+  width: 86%;
+  height: 86%;
+}
+.g-logika-pattern .lg-dots.n1 { grid-template-columns: 1fr; }
+.g-logika-pattern .lg-dots.n3,
+.g-logika-pattern .lg-dots.n5,
+.g-logika-pattern .lg-dots.n6 { grid-template-columns: repeat(3, 1fr); }
+.g-logika-pattern .lg-dot { font-size: calc(var(--cell) * 0.26); line-height: 1; }
+.g-logika-pattern .lg-dots.n1 .lg-dot { font-size: calc(var(--cell) * 0.5); }
+.g-logika-pattern .lg-dots.n2 .lg-dot { font-size: calc(var(--cell) * 0.36); }
+.g-logika-pattern .choices .lg-dots {
+  --cell: min(17vmin, 20vh);
+  width: var(--cell);
+  height: var(--cell);
+}
+.g-logika-pattern .choices .pic { font-size: min(11vmin, 13vh); }
+
+/* =========================================================
+ * 3) KAKUKKTOJÁS
+ * ========================================================= */
+.g-logika-odd .choices .lg-oddpic {
+  font-size: min(13vmin, 17vh);
+  transition: transform 0.2s;
+}
+.g-logika-odd .choices.many .lg-oddpic { font-size: min(11vmin, 15vh); }
+
+/* =========================================================
+ * 4) MERRE VAN? – térbeli viszonyok
+ * ========================================================= */
+.g-logika-where .lg-wwrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2vmin;
+  width: 100%;
+  margin: auto 0;
+}
+.g-logika-where .lg-glove,
+.g-logika-where .lg-glove-spacer {
+  flex: 0 0 min(13vmin, 14vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5vmin;
+}
+.g-logika-where .lg-glove {
+  background: #FFF4D6;
+  border: 0.5vmin solid #FFD166;
+  border-radius: 3vmin;
+  padding: 1.2vmin 0;
+}
+.g-logika-where .lg-glove .pic { font-size: min(9vmin, 10vw); }
+.g-logika-where .lg-glove-arrow { font-size: min(5vmin, 6vw); line-height: 1; }
+
+.g-logika-where .lg-thing {
+  background: #fff;
+  border-radius: 24%;
+  box-shadow: 0 0.6vmin 1.2vmin rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--th, min(15vmin, 17vh));
+  height: var(--th, min(15vmin, 17vh));
+  transition: transform 0.15s;
+  animation: lg-pop-in 0.4s both;
+}
+.g-logika-where .lg-thing:active { transform: scale(0.94); }
+.g-logika-where .lg-thing .pic { font-size: calc(var(--th, min(15vmin, 17vh)) * 0.72); }
+.g-logika-where .lg-thing.used { opacity: 0.45; }
+.g-logika-where .lg-thing.hint { animation: lg-glow 0.6s ease-in-out infinite; }
+
+/* rács (oszlop, plusz-alak, ikrek, sor) */
+.g-logika-where .lg-wgrid {
+  --cell: min(17vmin, calc((100vh - 200px) / var(--rows)), calc(70vw / var(--cols)));
+  --th: calc(var(--cell) * 0.86);
+  display: grid;
+  grid-template-columns: repeat(var(--cols), var(--cell));
+  grid-template-rows: repeat(var(--rows), var(--cell));
+  gap: 1vmin;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 4vmin;
+  padding: 2vmin;
+}
+.g-logika-where .lg-wgrid.kind-col { --cell: min(19vmin, calc((100vh - 210px) / 3)); }
+.g-logika-where .lg-wgrid.kind-between,
+.g-logika-where .lg-wgrid.kind-beside {
+  --cell: min(19vmin, calc(84vw / var(--cols)));
+  border-bottom: 1.4vmin solid #8BC34A;
+  border-radius: 4vmin 4vmin 1vmin 1vmin;
+}
+.g-logika-where .lg-wcell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--cell);
+  height: var(--cell);
+}
+.g-logika-where .lg-anchor .pic {
+  font-size: calc(var(--cell) * 0.92);
+  filter: drop-shadow(0 0.6vmin 0.6vmin rgba(0, 0, 0, 0.18));
+}
+.g-logika-where .lg-slot {
+  border: 0.6vmin dashed rgba(115, 57, 191, 0.45);
+  border-radius: 24%;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.5);
+}
+.g-logika-where .lg-slot.drop-hover { background: #FFF4D6; border-color: #FFB703; }
+.g-logika-where .lg-slot.hint { animation: lg-glow 0.6s ease-in-out infinite; }
+
+/* polc */
+.g-logika-where .lg-shelf {
+  --th: min(15vmin, calc((100vh - 230px) / 3 - 2vmin));
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #F3E3C8;
+  border: 1.2vmin solid #A0522D;
+  border-radius: 2vmin;
+  padding: 0 4vmin;
+}
+.g-logika-where .lg-plank {
+  display: flex;
+  justify-content: center;
+  padding: 1.2vmin 6vmin 0.6vmin;
+  border-bottom: 1.4vmin solid #A0522D;
+}
+.g-logika-where .lg-plank:last-child { border-bottom: 0; }
+
+/* bújócska: előtte / mögötte */
+.g-logika-where .lg-hide {
+  position: relative;
+  width: min(66vmin, 80vw);
+  height: min(48vmin, calc(100vh - 210px));
+  background: linear-gradient(#E6F4FF 0 70%, #CDEBB0 70% 100%);
+  border-radius: 4vmin;
+  overflow: hidden;
+}
+.g-logika-where .lg-hanchor {
+  position: absolute;
+  left: 50%;
+  bottom: 16%;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+.g-logika-where .lg-hanchor .pic { font-size: min(30vmin, 34vh); }
+.g-logika-where .lg-hide .lg-thing {
+  position: absolute;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 50%;
+}
+.g-logika-where .lg-h-behind { --th: min(13vmin, 15vh); left: 57%; bottom: 57%; z-index: 1; }
+.g-logika-where .lg-h-front { --th: min(16vmin, 18vh); left: 30%; bottom: 3%; z-index: 3; }
+.g-logika-where .lg-h-side { --th: min(13vmin, 15vh); left: 80%; bottom: 20%; z-index: 3; }
+.g-logika-where .lg-hide.mirror .lg-h-behind { left: auto; right: 57%; }
+.g-logika-where .lg-hide.mirror .lg-h-front { left: auto; right: 30%; }
+.g-logika-where .lg-hide.mirror .lg-h-side { left: auto; right: 80%; }
+.g-logika-where .lg-hide .lg-h-front,
+.g-logika-where .lg-hide .lg-h-side { filter: drop-shadow(0 0.6vmin 0.6vmin rgba(0, 0, 0, 0.25)); }
+.g-logika-where .lg-hide .lg-thing.used { opacity: 0.6; }
+
+/* tálca a húzható tárgyakkal */
+.g-logika-where .lg-tray {
+  display: flex;
+  gap: 3vmin;
+  justify-content: center;
+  margin-top: 1.5vmin;
+  padding: 1.4vmin 3vmin;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 3vmin;
+}
+.g-logika-where .lg-tray .lg-mov { --th: min(13vmin, 14vh); }
+.g-logika-where .lg-mov { cursor: grab; touch-action: none; }
+.g-logika-where .lg-mov.selected { transform: scale(1.12); box-shadow: 0 0 0 0.8vmin var(--c, #9B5DE5); }
+.g-logika-where .lg-slot .lg-mov { --th: calc(var(--cell) * 0.8); box-shadow: none; background: transparent; }
+
+/* =========================================================
+ * 5) ÁRNYÉKVADÁSZ
+ * ========================================================= */
+.g-logika-shadow .lg-shead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(26vmin, 26vh);
+  height: min(26vmin, 26vh);
+}
+.g-logika-shadow .lg-shead .pic { font-size: min(21vmin, 21vh); }
+.g-logika-shadow .lg-shadow {
+  filter: brightness(0);
+  opacity: 0.82;
+  transition: filter 0.7s ease, opacity 0.7s ease;
+}
+.g-logika-shadow .lg-shadow.lit { filter: brightness(1); opacity: 1; }
+.g-logika-shadow .choices .pic { font-size: min(12vmin, 15vh); }
+
+/* =========================================================
+ * 6) BUBU DOBOL
+ * ========================================================= */
+.g-logika-simon .lg-sbar {
+  display: flex;
+  align-items: center;
+  gap: 4vmin;
+}
+.g-logika-simon .lg-turn { font-size: min(10vmin, 11vh); line-height: 1; }
+.g-logika-simon .lg-replay {
+  width: min(12vmin, 13vh);
+  height: min(12vmin, 13vh);
+  border-radius: 50%;
+  background: #F6F0FF;
+  box-shadow: 0 0.5vmin 0 var(--d, #7339BF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.g-logika-simon .lg-replay .pic { font-size: min(7vmin, 8vh); }
+.g-logika-simon .lg-replay:disabled { opacity: 0.35; cursor: default; }
+.g-logika-simon .lg-pads {
+  --ps: min(24vmin, 21vw, calc(100vh - 290px));
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 3vmin;
+  justify-content: center;
+  margin: auto 0;
+}
+.g-logika-simon .lg-pads.n4 { --ps: min(21vmin, 20vw, calc(100vh - 290px)); }
+.g-logika-simon .lg-pad {
+  width: var(--ps);
+  height: var(--ps);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55) 0 14%, transparent 15%),
+    var(--pc);
+  box-shadow: 0 1.2vmin 0 rgba(0, 0, 0, 0.25), inset 0 -1vmin 0 rgba(0, 0, 0, 0.15);
+  border: 1vmin solid rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: saturate(0.75) brightness(0.92);
+  transition: transform 0.12s, filter 0.12s, box-shadow 0.12s;
+}
+.g-logika-simon .lg-pad .pic { font-size: calc(var(--ps) * 0.45); }
+.g-logika-simon .lg-pad.lit {
+  filter: saturate(1.2) brightness(1.25);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 1.2vmin #fff, 0 0 6vmin 2vmin var(--pc);
+}
+.g-logika-simon .lg-pads.busy .lg-pad { cursor: default; }
+.g-logika-simon .lg-pads:not(.busy) .lg-pad:active { transform: scale(0.95); }
+.g-logika-simon .lg-pad.hint { animation: lg-glow 0.6s ease-in-out infinite; }
+
+/* =========================================================
+ * 7) RAKD SORBA
+ * ========================================================= */
+.g-logika-sort .lg-pile,
+.g-logika-sort .lg-line {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 2vmin;
+  width: 100%;
+  max-width: 96vw;
+}
+.g-logika-sort .lg-pile { min-height: min(22vmin, 24vh); margin-top: auto; }
+.g-logika-sort .lg-line {
+  margin: 2.5vmin 0 auto;
+  padding: 1.6vmin 2vmin;
+  min-height: min(22vmin, 24vh);
+  background: rgba(255, 255, 255, 0.55);
+  border-bottom: 1.4vmin solid var(--d, #7339BF);
+  border-radius: 3vmin 3vmin 1vmin 1vmin;
+  box-sizing: border-box;
+}
+.g-logika-sort .lg-line.lg-done { background: #E6FAEE; border-bottom-color: #3DBE6B; }
+.g-logika-sort .lg-hold {
+  min-width: 7vmin;
+  min-height: 7vmin;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border: 0.5vmin dashed rgba(115, 57, 191, 0.4);
+  border-radius: 2vmin;
+  box-sizing: border-box;
+}
+.g-logika-sort .lg-hold.full { border-color: transparent; }
+.g-logika-sort .lg-sitem {
+  background: #fff;
+  border-radius: 2.4vmin;
+  padding: 1vmin;
+  box-shadow: 0 0.6vmin 1.2vmin rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  animation: lg-pop-in 0.4s both;
+}
+.g-logika-sort .lg-sitem.placed { background: transparent; box-shadow: none; cursor: default; }
+.g-logika-sort .lg-sitem.hint { animation: lg-glow 0.6s ease-in-out infinite; }
+.g-logika-sort .lg-sz { line-height: 1; }
+
+/* tornyok */
+.g-logika-sort .lg-tower {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4vmin;
+}
+.g-logika-sort .lg-block {
+  width: min(9vmin, 10vw);
+  height: min(4.2vmin, 4.6vh);
+  background: var(--pc);
+  border-radius: 0.8vmin;
+  box-shadow: inset 0 -0.6vmin 0 rgba(0, 0, 0, 0.18), inset 0 0.4vmin 0 rgba(255, 255, 255, 0.35);
+}
+
+/* ceruzák: fekvő sávok, egymás alatt */
+.g-logika-sort.kind-pencil { --pu: min(7vmin, 12vw); }
+.g-logika-sort.kind-pencil .lg-pile,
+.g-logika-sort.kind-pencil .lg-line {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1vmin;
+  width: auto;
+  min-width: min(60vmin, 90vw);
+}
+.g-logika-sort.kind-pencil .lg-pile { align-items: center; }
+.g-logika-sort.kind-pencil .lg-hold { min-height: min(5vmin, 5vh); min-width: min(12vmin, 20vw); justify-content: flex-start; }
+.g-logika-sort.kind-pencil .lg-sitem { padding: 0.8vmin 1.2vmin; }
+.g-logika-sort .lg-pencil {
+  position: relative;
+  display: block;
+  height: min(4vmin, 4.4vh);
+  margin-right: min(4vmin, 4.4vh);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0 30%, transparent 30% 70%, rgba(0, 0, 0, 0.15) 70%), var(--pc);
+  border-left: min(2vmin, 2.2vh) solid #FF9FB2;
+  border-radius: 0.8vmin 0 0 0.8vmin;
+  box-sizing: content-box;
+}
+.g-logika-sort .lg-pencil::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: calc(-1 * min(4vmin, 4.4vh));
+  width: 0;
+  height: 0;
+  border-left: min(4vmin, 4.4vh) solid #F4C27A;
+  border-top: min(2vmin, 2.2vh) solid transparent;
+  border-bottom: min(2vmin, 2.2vh) solid transparent;
+}
+.g-logika-sort .lg-pencil::before {
+  content: '';
+  position: absolute;
+  top: calc(50% - min(0.7vmin, 0.8vh));
+  right: calc(-1 * min(4vmin, 4.4vh));
+  width: 0;
+  height: 0;
+  border-left: min(1.4vmin, 1.5vh) solid #333;
+  border-top: min(0.7vmin, 0.8vh) solid transparent;
+  border-bottom: min(0.7vmin, 0.8vh) solid transparent;
+  z-index: 1;
+}
+
+/* álló tableten a nagyobb elemek se lógjanak ki */
+@media (orientation: portrait) {
+  .g-logika-sort.kind-size .lg-pile,
+  .g-logika-sort.kind-size .lg-line { gap: 1.2vmin; }
+}

@@ -1,0 +1,239 @@
+/* =========================================================
+ * Természet-völgy (környezetismeret) – játékok saját stílusa
+ * Minden szelektor a .g-kornyezet (a világ minden játékának közös osztálya)
+ * vagy a játék saját osztályával (.g-kornyezet-<játék>) kezdődik.
+ * ========================================================= */
+
+/* ---------- közös: gombtartalom, fejléc ---------- */
+.g-kornyezet .kz-opt { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; pointer-events: none; }
+.g-kornyezet .kz-opt .pic { font-size: clamp(2.6rem, 9.5vmin, 5.2rem); line-height: 1.05; }
+.g-kornyezet .kz-cap {
+  font-size: clamp(.78rem, 2.2vmin, 1.1rem); font-weight: 800; color: var(--ink-soft);
+  line-height: 1.1; text-align: center; max-width: 11em;
+}
+.g-kornyezet .kz-head-pics { display: flex; align-items: center; justify-content: center; gap: clamp(8px, 2.5vmin, 26px); flex-wrap: wrap; }
+.g-kornyezet .kz-head-pics > .pic { font-size: clamp(3.4rem, 13vmin, 7rem); line-height: 1.05; }
+.g-kornyezet .kz-head-pics > .pic.kz-arrow-pic { font-size: clamp(2rem, 7vmin, 3.6rem); }
+.g-kornyezet .kz-float { animation: kzFloat 3s ease-in-out infinite; }
+.g-kornyezet .kz-q { animation: kzQ 1.4s ease-in-out infinite; }
+@keyframes kzFloat { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-8px) rotate(3deg); } }
+@keyframes kzQ { 0%, 100% { transform: scale(1) rotate(0); } 50% { transform: scale(1.15) rotate(-8deg); } }
+
+/* ---------- közös: csoportosító házak ---------- */
+.g-kornyezet .kz-bins { display: flex; justify-content: center; align-items: stretch; gap: clamp(10px, 2.4vmin, 26px); width: 100%; }
+.g-kornyezet .kz-bin {
+  flex: 1 1 0; max-width: 330px; min-width: 0;
+  min-height: clamp(130px, 27vmin, 240px);
+  background: #fff; border-radius: 30px; border: 5px solid rgba(255, 255, 255, .9);
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .12), 0 14px 26px rgba(0, 0, 0, .08);
+  display: flex; flex-direction: column; align-items: center; padding: clamp(6px, 1.4vmin, 14px);
+  cursor: pointer; animation: kzBinIn .5s cubic-bezier(.2, 1.4, .4, 1) backwards;
+}
+@keyframes kzBinIn { from { transform: translateY(-30px) scale(.8); opacity: 0; } }
+.g-kornyezet .kz-bin-head { display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+.g-kornyezet .kz-bin-head .pic { font-size: clamp(2.4rem, 9vmin, 4.6rem); line-height: 1.05; }
+.g-kornyezet .kz-bin-in {
+  flex: 1; width: 100%; display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center;
+  gap: 2px; padding-top: 4px; pointer-events: none; min-height: clamp(40px, 8vmin, 80px);
+  border-top: 3px dashed rgba(0, 0, 0, .12); margin-top: 4px;
+}
+.g-kornyezet .kz-mini { font-family: var(--font-emoji); font-size: clamp(1.5rem, 5vmin, 2.6rem); line-height: 1.1; animation: kzDrop .45s cubic-bezier(.3, 1.8, .5, 1); }
+@keyframes kzDrop { from { transform: translateY(-40px) scale(1.6); opacity: 0; } }
+.g-kornyezet .kz-bins-4 .kz-bin { max-width: 240px; min-height: clamp(120px, 24vmin, 210px); }
+.g-kornyezet .kz-bins-4 .kz-bin-head .pic { font-size: clamp(2rem, 7.5vmin, 3.8rem); }
+.g-kornyezet .kz-bins-4 .kz-mini { font-size: clamp(1.3rem, 4.2vmin, 2.2rem); }
+
+/* a házak színei */
+.g-kornyezet .kz-bin-farm { background: linear-gradient(180deg, #FFF4D6, #FFE0A3); }
+.g-kornyezet .kz-bin-forest { background: linear-gradient(180deg, #E1F7DF, #A9E2A2); }
+.g-kornyezet .kz-bin-water { background: linear-gradient(180deg, #E2F4FF, #9FD6F7); }
+.g-kornyezet .kz-bin-air { background: linear-gradient(180deg, #FFFFFF, #DDEFFF); }
+.g-kornyezet .kz-bin-land { background: linear-gradient(180deg, #F1EEE8, #D6CFC2); }
+.g-kornyezet .kz-bin-healthy { background: radial-gradient(circle at 50% 55%, #fff 0 52%, #BDEFC5 53% 100%); border-color: #3DBE6B; }
+.g-kornyezet .kz-bin-snack { background: radial-gradient(circle at 50% 55%, #fff 0 52%, #FFC2C2 53% 100%); border-color: #FF6B6B; }
+.g-kornyezet .kz-basket { border-radius: 26px 26px 50px 50px; }
+.g-kornyezet .kz-bin-fruit { background: linear-gradient(180deg, #FFE9E6, #F7C59F); border-color: #E76F51; }
+.g-kornyezet .kz-bin-veg { background: linear-gradient(180deg, #F0FAE4, #C8E6A0); border-color: #6A994E; }
+.g-kornyezet .kz-bin-cow { background: linear-gradient(180deg, #FFFFFF, #E8E8F0); }
+.g-kornyezet .kz-bin-hen { background: linear-gradient(180deg, #FFF8E1, #FFE29A); }
+.g-kornyezet .kz-bin-wheat { background: linear-gradient(180deg, #FFF6DD, #F3D58A); }
+.g-kornyezet .kz-bin-tree { background: linear-gradient(180deg, #E8F8E4, #B5E3A8); }
+
+/* a szétválogatandó elemek */
+.g-kornyezet .kz-items { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 2vmin, 20px); max-width: 100%; min-height: clamp(76px, 14vmin, 126px); }
+.g-kornyezet .kz-item {
+  width: clamp(76px, 14vmin, 126px); height: clamp(76px, 14vmin, 126px);
+  background: #fff; border-radius: 26px; border: 4px solid #fff;
+  box-shadow: 0 7px 0 rgba(0, 0, 0, .13), 0 12px 20px rgba(0, 0, 0, .08);
+  display: grid; place-items: center; user-select: none; -webkit-user-select: none;
+  animation: kzItemIn .45s cubic-bezier(.2, 1.4, .4, 1) backwards;
+  transition: transform .2s, opacity .3s;
+}
+.g-kornyezet .kz-item .pic { font-size: clamp(2.6rem, 9vmin, 4.6rem); line-height: 1; pointer-events: none; }
+@keyframes kzItemIn { from { transform: translateY(40px) scale(.5); opacity: 0; } }
+.g-kornyezet .kz-item.done { transform: scale(0); opacity: 0; pointer-events: none; }
+.g-kornyezet .kz-item.drag-ghost { animation: none; }
+
+/* ---------- közös: igaz / nem igaz ---------- */
+.g-kornyezet .kz-tf .choice { min-width: clamp(120px, 24vmin, 210px); }
+.g-kornyezet .kz-tf .choice.kz-yes { background: #E4F8E6; border-color: #9BE0A8; }
+.g-kornyezet .kz-tf .choice.kz-no { background: #FFE8E6; border-color: #FFB4AC; }
+.g-kornyezet .kz-tf .kz-cap { font-size: clamp(1rem, 3vmin, 1.5rem); color: var(--ink); }
+
+/* ---------- közös: sorba rendezés ---------- */
+.g-kornyezet .kz-track { display: flex; align-items: center; justify-content: center; gap: clamp(4px, 1.2vmin, 12px); flex-wrap: nowrap; max-width: 100%; }
+.g-kornyezet .kz-slot {
+  position: relative; width: clamp(80px, 15vmin, 140px); height: clamp(80px, 15vmin, 140px);
+  border-radius: 26px; border: 4px dashed rgba(0, 0, 0, .22); background: rgba(255, 255, 255, .55);
+  display: grid; place-items: center;
+}
+.g-kornyezet .kz-slot.filled { border-style: solid; border-color: var(--ok); background: var(--ok-bg); }
+.g-kornyezet .kz-slot-num {
+  position: absolute; top: -12px; left: -12px; width: clamp(28px, 5vmin, 40px); height: clamp(28px, 5vmin, 40px);
+  border-radius: 50%; background: var(--c); color: #fff; display: grid; place-items: center;
+  font-size: clamp(.9rem, 2.8vmin, 1.3rem); font-weight: 900; box-shadow: 0 3px 0 var(--d);
+}
+.g-kornyezet .kz-slot-pic { font-size: clamp(2.6rem, 9vmin, 4.6rem) !important; animation: kzDrop .45s cubic-bezier(.3, 1.8, .5, 1); }
+.g-kornyezet .kz-arrow { font-size: clamp(1.4rem, 4.5vmin, 2.4rem); color: var(--d); font-weight: 900; }
+.g-kornyezet .kz-cards { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(10px, 2.4vmin, 24px); }
+.g-kornyezet .kz-card.done { opacity: .25; transform: scale(.85); pointer-events: none; filter: grayscale(.8); }
+
+/* ---------- közös: több jó válasz ---------- */
+.g-kornyezet .kz-multi .choice { min-width: clamp(90px, 16vmin, 160px); min-height: clamp(90px, 16vmin, 150px); }
+
+/* =========================================================
+ * Évszakok
+ * ========================================================= */
+.g-kornyezet-seasons .kz-seasons .choice { min-width: clamp(84px, 17vmin, 170px); }
+.g-kornyezet-seasons .kz-s-tavasz { background: #EAFBE7; border-color: #B6E8AE; }
+.g-kornyezet-seasons .kz-s-nyar { background: #FFF6CC; border-color: #FFE27A; }
+.g-kornyezet-seasons .kz-s-osz { background: #FFE9D6; border-color: #FFC48C; }
+.g-kornyezet-seasons .kz-s-tel { background: #E6F4FF; border-color: #A9D8FF; }
+.g-kornyezet-seasons .kz-seasons .kz-cap { font-size: clamp(.95rem, 2.8vmin, 1.4rem); color: var(--ink); }
+.g-kornyezet-seasons .kz-month { font-size: clamp(2.2rem, 8vmin, 4.4rem); color: var(--d); }
+
+/* =========================================================
+ * Állatok
+ * ========================================================= */
+.g-kornyezet-animals .kz-bubble {
+  position: relative; background: #FFF7D6; border: 4px solid #FFD166; border-radius: 30px;
+  padding: clamp(8px, 2vmin, 18px) clamp(16px, 4vmin, 36px);
+  font-size: clamp(1.8rem, 6.5vmin, 3.4rem); font-weight: 900; color: var(--d);
+  animation: kzTalk 1.2s ease-in-out infinite;
+}
+.g-kornyezet-animals .kz-bubble::before {
+  content: ''; position: absolute; left: -18px; top: 50%; margin-top: -10px;
+  border: 10px solid transparent; border-right: 14px solid #FFD166; border-left: 0;
+}
+@keyframes kzTalk { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06) rotate(-1deg); } }
+
+/* =========================================================
+ * Testem
+ * ========================================================= */
+.g-kornyezet-body .kz-choices.pics .kz-opt .pic { font-size: clamp(2.8rem, 10vmin, 5.4rem); }
+
+/* =========================================================
+ * Napirend
+ * ========================================================= */
+.g-kornyezet-daily .kz-parts .choice { min-width: clamp(84px, 17vmin, 170px); }
+.g-kornyezet-daily .kz-p-reggel { background: linear-gradient(180deg, #FFE7C2, #FFF6E5); }
+.g-kornyezet-daily .kz-p-del { background: linear-gradient(180deg, #CFF0FF, #F2FBFF); }
+.g-kornyezet-daily .kz-p-este { background: linear-gradient(180deg, #FFD0B5, #E9D7FF); }
+.g-kornyezet-daily .kz-p-ejjel { background: linear-gradient(180deg, #3A3F7A, #5A5FA6); border-color: #5A5FA6; }
+.g-kornyezet-daily .kz-p-ejjel .kz-cap { color: #fff; }
+.g-kornyezet-daily .kz-parts .kz-cap { font-size: clamp(.95rem, 2.8vmin, 1.4rem); color: var(--ink); }
+.g-kornyezet-daily .kz-p-ejjel.choice .kz-cap { color: #fff; }
+
+/* a hét napjai */
+.g-kornyezet-daily .kz-days { display: flex; justify-content: center; gap: clamp(10px, 2.6vmin, 28px); flex-wrap: wrap; }
+.g-kornyezet-daily .kz-day { min-width: clamp(110px, 22vmin, 200px); min-height: clamp(96px, 18vmin, 170px); }
+.g-kornyezet-daily .kz-day.selected { outline: 6px solid var(--gold); background: #FFF8DC; }
+.g-kornyezet-daily .kz-day-given, .g-kornyezet-daily .kz-day-q {
+  background: #fff; border-radius: 26px; border: 4px solid var(--c);
+  padding: 8px 14px; display: grid; place-items: center; box-shadow: 0 6px 0 rgba(0, 0, 0, .1);
+}
+.g-kornyezet-daily .kz-day-q { border-style: dashed; animation: kzQ 1.4s ease-in-out infinite; }
+.g-kornyezet-daily .kz-day-q .pic { font-size: clamp(2.4rem, 9vmin, 4.6rem); }
+.g-kornyezet-daily .kz-dayface { display: flex; flex-direction: column; align-items: center; gap: clamp(2px, .8vmin, 8px); pointer-events: none; }
+.g-kornyezet-daily .kz-spk { font-family: var(--font-emoji); font-size: clamp(1.4rem, 4.5vmin, 2.4rem); line-height: 1; }
+.g-kornyezet-daily .kz-daynum { font-size: clamp(1.8rem, 6.5vmin, 3.2rem); font-weight: 900; color: var(--d); line-height: 1; }
+.g-kornyezet-daily .kz-dayface.weekend .kz-daynum { color: #E76F51; }
+.g-kornyezet-daily .kz-dots { display: flex; gap: clamp(2px, .6vmin, 5px); }
+.g-kornyezet-daily .kz-dot { width: clamp(9px, 1.9vmin, 15px); height: clamp(9px, 1.9vmin, 15px); border-radius: 50%; background: #E3E6EF; }
+.g-kornyezet-daily .kz-dot.on { background: var(--c); }
+.g-kornyezet-daily .kz-dot.on.we { background: #E76F51; }
+.g-kornyezet-daily .kz-confirm {
+  width: clamp(84px, 16vmin, 130px); height: clamp(84px, 16vmin, 130px); border-radius: 50%;
+  border: 6px solid #fff; background: #3DBE6B; color: #fff;
+  font-size: clamp(2.6rem, 9vmin, 4.6rem); font-weight: 900; line-height: 1;
+  display: grid; place-items: center; box-shadow: 0 8px 0 #23934B, 0 14px 24px rgba(0, 0, 0, .15);
+  cursor: pointer; transition: filter .2s, opacity .2s, transform .1s;
+}
+.g-kornyezet-daily .kz-confirm:disabled { filter: grayscale(1); opacity: .45; cursor: default; }
+.g-kornyezet-daily .kz-confirm.ready { animation: kzReady 1s ease-in-out infinite; }
+.g-kornyezet-daily .kz-confirm:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 3px 0 #23934B; }
+@keyframes kzReady { 0%, 100% { transform: scale(1); box-shadow: 0 8px 0 #23934B, 0 0 0 0 rgba(61, 190, 107, .7); } 50% { transform: scale(1.1); box-shadow: 0 8px 0 #23934B, 0 0 0 18px rgba(61, 190, 107, 0); } }
+
+/* =========================================================
+ * Közlekedés
+ * ========================================================= */
+.g-kornyezet-traffic .kz-light {
+  display: flex; flex-direction: column; gap: clamp(4px, 1vmin, 10px); align-items: center;
+  background: #2B2D42; border-radius: 20px; padding: clamp(6px, 1.2vmin, 12px); pointer-events: none;
+  box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .3);
+}
+.g-kornyezet-traffic .kz-lamp {
+  width: clamp(42px, 8vmin, 70px); height: clamp(42px, 8vmin, 70px); border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--font-emoji); font-size: clamp(1.4rem, 4.6vmin, 2.4rem);
+  background: #44475E; filter: grayscale(1) brightness(.55);
+}
+.g-kornyezet-traffic .kz-lamp.red.on { background: #FF4D4D; filter: none; box-shadow: 0 0 20px 6px rgba(255, 77, 77, .7); animation: kzGlow 1.2s ease-in-out infinite; }
+.g-kornyezet-traffic .kz-lamp.green.on { background: #3DDC6E; filter: none; box-shadow: 0 0 20px 6px rgba(61, 220, 110, .7); animation: kzGlow 1.2s ease-in-out infinite; }
+@keyframes kzGlow { 50% { filter: brightness(1.2); } }
+.g-kornyezet-traffic .kz-light.big .kz-lamp { width: clamp(56px, 11vmin, 96px); height: clamp(56px, 11vmin, 96px); font-size: clamp(1.8rem, 6.4vmin, 3.4rem); }
+.g-kornyezet-traffic .kz-zebra {
+  width: clamp(110px, 24vmin, 220px); height: clamp(50px, 10vmin, 90px); border-radius: 10px;
+  background: repeating-linear-gradient(90deg, #fff 0 18px, #555 18px 32px); border: 5px solid #555;
+}
+.g-kornyezet-traffic .kz-two .choice { min-width: clamp(120px, 24vmin, 210px); }
+.g-kornyezet-traffic .kz-lights .choice { padding: 12px 24px; }
+
+/* =========================================================
+ * Időjárás
+ * ========================================================= */
+.g-kornyezet-weather .kz-thermo {
+  position: relative; width: clamp(54px, 10vmin, 84px); height: clamp(130px, 26vmin, 220px);
+  display: flex; flex-direction: column; align-items: center; pointer-events: none;
+}
+.g-kornyezet-weather .kz-tube {
+  position: relative; width: 38%; flex: 1; background: #fff; border: 4px solid #8A8FA8; border-bottom: 0;
+  border-radius: 999px 999px 0 0; overflow: hidden;
+}
+.g-kornyezet-weather .kz-fill { position: absolute; left: 0; right: 0; bottom: 0; background: #FF4D4D; animation: kzFillUp 1.2s ease-out backwards; }
+.g-kornyezet-weather .kz-thermo.hot .kz-fill { height: 88%; background: #FF4D4D; }
+.g-kornyezet-weather .kz-thermo.cold .kz-fill { height: 14%; background: #4D96FF; }
+@keyframes kzFillUp { from { height: 0; } }
+.g-kornyezet-weather .kz-bulb {
+  width: 72%; aspect-ratio: 1; border-radius: 50%; border: 4px solid #8A8FA8; margin-top: -4px; background: #FF4D4D;
+}
+.g-kornyezet-weather .kz-thermo.cold .kz-bulb { background: #4D96FF; }
+.g-kornyezet-weather .kz-th-ico { position: absolute; right: -60%; font-family: var(--font-emoji); font-size: clamp(1.1rem, 3.6vmin, 1.8rem); }
+.g-kornyezet-weather .kz-th-ico.top { top: 0; }
+.g-kornyezet-weather .kz-th-ico.bot { bottom: 32%; }
+.g-kornyezet-weather .kz-thermos .choice { padding: 12px 40px 12px 24px; }
+.g-kornyezet-weather .kz-two .choice { min-width: clamp(120px, 24vmin, 210px); }
+
+/* alacsony, széles képernyő (laptop): minden kicsit kisebb, hogy ne kelljen görgetni */
+@media (max-height: 620px) {
+  .g-kornyezet .kz-head-pics > .pic { font-size: clamp(2.6rem, 11vmin, 5rem); }
+  .g-kornyezet .kz-bin { min-height: clamp(110px, 24vmin, 190px); }
+  .g-kornyezet .kz-item, .g-kornyezet .kz-items { min-height: 0; }
+  .g-kornyezet .kz-item { width: clamp(64px, 12vmin, 100px); height: clamp(64px, 12vmin, 100px); }
+  .g-kornyezet .kz-item .pic { font-size: clamp(2.2rem, 8vmin, 3.6rem); }
+}
+/* álló tablet / keskeny képernyő: a 4 ház 2×2-ben */
+@media (max-aspect-ratio: 3/4) {
+  .g-kornyezet .kz-bins-4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .g-kornyezet .kz-bins-4 .kz-bin { max-width: none; }
+  .g-kornyezet .kz-track { flex-wrap: wrap; }
+}

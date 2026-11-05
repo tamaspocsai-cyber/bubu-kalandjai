@@ -1,0 +1,104 @@
+/* Bubu kalandjai – Betűerdő (magyar) játékok */
+
+/* ---------- közös: nagy kép a feladatfejben ---------- */
+.g-magyar .mg-pic {
+  font-family: var(--font-emoji); font-size: clamp(4rem, 17vmin, 9rem); line-height: 1;
+  background: none; border: 0; padding: 0 clamp(4px, 1vmin, 10px); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.g-magyar .mg-q { font-family: var(--font-emoji); font-size: clamp(2.4rem, 9vmin, 4.6rem); line-height: 1; animation: wiggle 2.4s ease-in-out infinite; }
+.g-magyar .choices.letters .choice { min-width: clamp(96px, 18vmin, 170px); }
+.g-magyar .choices.letters .ch-txt { font-size: clamp(3.4rem, 13vmin, 7rem); }
+
+/* ---------- Betűvadász ---------- */
+.g-magyar-hunt .mg-hunter { display: flex; align-items: center; gap: clamp(4px, 1vmin, 10px); }
+.g-magyar-hunt .mg-hunter .pic { font-size: clamp(3.4rem, 13vmin, 6.5rem); }
+.g-magyar-hunt .mg-glass { animation: wiggle 2s ease-in-out infinite; }
+.g-magyar-hunt .mg-upper { font-size: clamp(5rem, 22vmin, 11rem); cursor: pointer; }
+.g-magyar-hunt .mg-arrow { font-size: clamp(2rem, 7vmin, 3.6rem); }
+
+/* ---------- Tapsolj! ---------- */
+.g-magyar-clap .task-head { flex-direction: column; gap: 4px; }
+.g-magyar-clap .mg-syl {
+  font-family: var(--font-read); font-weight: 700; color: var(--d);
+  font-size: clamp(1.6rem, 6vmin, 3rem); min-height: 1.2em; line-height: 1.2;
+}
+.g-magyar-clap .mg-taps {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(6px, 1.6vmin, 16px);
+  min-height: clamp(48px, 10vmin, 84px); align-items: center; padding: 4px 12px; border-radius: 24px;
+}
+.g-magyar-clap .mg-tap { font-family: var(--font-emoji); font-size: clamp(2.2rem, 8vmin, 4rem); line-height: 1; }
+.g-magyar-clap .mg-tap.ghost { opacity: .25; filter: grayscale(1); }
+.g-magyar-clap .mg-clap-row { display: flex; align-items: center; justify-content: center; gap: clamp(16px, 4vmin, 44px); }
+.g-magyar-clap .mg-drum {
+  width: clamp(130px, 30vmin, 240px); height: clamp(130px, 30vmin, 240px); border-radius: 50%;
+  background: #fff; border: 6px solid var(--c);
+  box-shadow: 0 10px 0 var(--d), 0 18px 28px rgba(0, 0, 0, .12);
+  font-family: var(--font-emoji); font-size: clamp(4.4rem, 17vmin, 8.5rem); line-height: 1; cursor: pointer;
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+}
+.g-magyar-clap .mg-drum:active { transform: translateY(6px); box-shadow: 0 4px 0 var(--d); }
+.g-magyar-clap .mg-check, .g-magyar-clap .mg-reset {
+  border-radius: 50%; border: 0; cursor: pointer; color: #fff; font-weight: 900; font-family: var(--font-ui);
+  display: grid; place-items: center; line-height: 1; touch-action: manipulation;
+}
+.g-magyar-clap .mg-check {
+  width: clamp(92px, 18vmin, 140px); height: clamp(92px, 18vmin, 140px);
+  background: var(--ok); box-shadow: 0 8px 0 #23934B; font-size: clamp(3rem, 10vmin, 5rem);
+}
+.g-magyar-clap .mg-reset {
+  width: clamp(64px, 12vmin, 96px); height: clamp(64px, 12vmin, 96px);
+  background: #B8C0D9; box-shadow: 0 6px 0 #8A93B0; font-size: clamp(2rem, 7vmin, 3.4rem);
+}
+.g-magyar-clap .mg-check:active, .g-magyar-clap .mg-reset:active { transform: translateY(5px); box-shadow: none; }
+
+/* ---------- Szóépítő ---------- */
+.g-magyar-build .mg-slots { display: flex; justify-content: center; gap: clamp(6px, 1.6vmin, 16px); flex-wrap: nowrap; max-width: 100%; }
+.g-magyar-build .mg-slot {
+  width: clamp(64px, 14vmin, 130px); height: clamp(76px, 16vmin, 150px);
+  border-radius: 22px; border: 4px dashed var(--c); background: rgba(255, 255, 255, .55);
+  display: grid; place-items: center;
+  font-family: var(--font-read); font-weight: 700; font-size: clamp(2.6rem, 10vmin, 5.4rem); line-height: 1; color: var(--ink);
+}
+.g-magyar-build .mg-slot.filled { border-style: solid; background: #fff; box-shadow: 0 6px 0 rgba(0, 0, 0, .1); }
+.g-magyar-build .mg-tiles { display: flex; flex-wrap: wrap; justify-content: center; gap: clamp(8px, 2vmin, 20px); max-width: 100%; }
+.g-magyar-build .mg-tile {
+  width: clamp(76px, 15vmin, 130px); height: clamp(76px, 15vmin, 130px);
+  border-radius: 24px; border: 4px solid #fff; background: #FFF6D6; cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .14), 0 12px 20px rgba(0, 0, 0, .08);
+  font-family: var(--font-read); font-weight: 700; font-size: clamp(2.6rem, 9.5vmin, 5rem); line-height: 1; color: var(--ink);
+  animation: choiceIn .4s cubic-bezier(.2, 1.4, .4, 1) backwards; touch-action: manipulation;
+}
+.g-magyar-build .mg-tile:active { transform: translateY(5px); box-shadow: 0 3px 0 rgba(0, 0, 0, .14); }
+.g-magyar-build .mg-tile.gone { visibility: hidden; }
+
+/* ---------- Olvasó ---------- */
+.g-magyar-read .task-head { flex-wrap: nowrap; gap: clamp(10px, 3vmin, 30px); }
+.g-magyar-read .mg-read-text { font-size: clamp(3.4rem, 14vmin, 7.5rem); letter-spacing: .06em; }
+.g-magyar-read .mg-read-text.sent { font-size: clamp(2.2rem, 8.5vmin, 4.6rem); letter-spacing: .03em; word-spacing: .2em; }
+.g-magyar-read .mg-ear {
+  flex: none; width: clamp(64px, 12vmin, 96px); height: clamp(64px, 12vmin, 96px); border-radius: 50%;
+  background: #FFF0B3; border: 4px solid var(--gold); box-shadow: 0 5px 0 var(--gold-d); cursor: pointer;
+  font-family: var(--font-emoji); font-size: clamp(2rem, 6.5vmin, 3.2rem); line-height: 1;
+}
+.g-magyar-read .mg-ear:active { transform: translateY(4px); box-shadow: none; }
+
+/* ---------- Hol a hang? ---------- */
+.g-magyar-place .mg-sound { font-family: var(--font-emoji); font-size: clamp(2.4rem, 9vmin, 4.6rem); line-height: 1; animation: wiggle 2.4s ease-in-out infinite; }
+.g-magyar-place .mg-boxes { display: flex; justify-content: center; flex-wrap: nowrap; gap: clamp(8px, 2vmin, 20px); max-width: 100%; }
+.g-magyar-place .mg-box {
+  width: clamp(80px, 17vmin, 160px); height: clamp(80px, 17vmin, 160px);
+  border-radius: 24px; border: 5px solid var(--c); background: #fff; cursor: pointer;
+  box-shadow: 0 8px 0 var(--d), 0 14px 22px rgba(0, 0, 0, .08);
+  font-family: var(--font-read); font-weight: 700; font-size: clamp(2.6rem, 10vmin, 5.4rem); line-height: 1; color: var(--ink-soft);
+  touch-action: manipulation;
+}
+.g-magyar-place .mg-box:active { transform: translateY(5px); box-shadow: 0 3px 0 var(--d); }
+.g-magyar-place .mg-box.target { color: var(--ink); background: var(--ok-bg); border-color: var(--ok); }
+
+/* álló tableten / keskeny képernyőn kisebb dobozok, hogy 5 is elférjen egy sorban */
+@media (max-aspect-ratio: 4/5) {
+  .g-magyar-build .mg-slot { width: clamp(50px, 13vw, 120px); height: clamp(62px, 16vw, 140px); font-size: clamp(2rem, 9vw, 5rem); }
+  .g-magyar-place .mg-box { width: clamp(54px, 13.5vw, 140px); height: clamp(54px, 13.5vw, 140px); font-size: clamp(2rem, 9vw, 5rem); }
+  .g-magyar-read .task-head { flex-wrap: wrap; }
+}
