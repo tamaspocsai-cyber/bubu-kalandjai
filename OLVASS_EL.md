@@ -4,7 +4,9 @@ Játékos tanulóprogram **1. osztályosoknak**, akik **még nem tudnak olvasni*
 Mindent Bubu, a kis zöld sárkány mond el hangosan. A gyereknek nem kell olvasnia, csak koppintania (vagy húznia).
 
 ## Indítás
-- Kattints duplán az **`index.html`** fájlra.
+- **Online (tableten, telefonon, bármilyen gépen):** https://tamaspocsai-cyber.github.io/bubu-kalandjai/
+  Tableten érdemes a böngésző menüjéből a „Hozzáadás a kezdőképernyőhöz” lehetőséget választani, így ikonról indul, mint egy alkalmazás.
+- **Helyben:** kattints duplán az **`index.html`** fájlra.
 - **Legjobb böngésző: Microsoft Edge.** Ebben a legszebb a magyar felolvasó hang („Microsoft Noémi / Tamás Online”, ehhez internet kell). Chrome-ban a Windows saját magyar hangja szól („Microsoft Szabolcs”). Ez gépiesebb, de jól érthető.
 - Nem kell telepíteni. Ha van internet, a program letölt két gyerekbarát betűtípust. Az egyik az **Andika**, amelyet kifejezetten olvasni tanulóknak terveztek.
 - **Tableten:** másold a teljes `Bubu-kalandjai` mappát az eszközre, vagy tedd fel egy tárhelyre (pl. GitHub Pages, Netlify), és nyisd meg böngészőben. Érintéssel ugyanúgy működik, és teljes képernyőre vált.
